@@ -46,14 +46,44 @@ class Encoder {
   */
 public:
 
-    // constructor : sets pins as inputs
+    /* 
+	 * Constructor : sets pins as inputs and
+	 * registers the encoder's starting position.
+	 */
+    Encoder( uint8_t PinA, uint8_t PinB, uint8_t ButtonPin );
 
-    Encoder( uint8_t PinA, uint8_t PinB );
+	/* Function: poll
+	 * --------------
+	 * Check pin A for changes, and call update() if needed.
+	 * Call poll() every time through the main loop if you
+	 * don't have interrupts available. The faster you call
+	 * poll(), the more likely you are to catch all encoder
+	 * movements.
+	 */
+	void poll();
+
+	/* Function: getDistanceMoved
+	 * --------------------------
+	 * Return the distance this encoder has moved since the
+	 * last call to poll(). You can use this as a 
+	 * check for movement, e.g. if(encoder.getDistanceMoved()) 
+	 * will be true when the encoder has moved. No need to do a 
+	 * check seperately.
+	 *
+	 * Note that it doesn't make sense to call this if you are
+	 * using interrupts: if the encoder only updates position
+	 * when it moves in real life, it will always have moved since
+	 * the last call to update(). The function is for use with polling,
+	 * where the encoder may or may not have moved since the last poll.
+	 * If you are using interrupts, call getPosition() directly.
+	 */
+	long getDistanceMoved();
 
     // call this from your interrupt function
 	// or from a polling routine, if interrupts are not available.
-
     void update ();
+
+	long getLastUpdateTime ();
 
     // returns current position
 
@@ -63,13 +93,23 @@ public:
 
     void setPosition ( const long int p);
 
+	bool buttonIsBeingPressed ();
+
 private:
 
-    long int position;
+    long int position, previousPosition;
 
     uint8_t pin_a;
 
     uint8_t pin_b;
+
+	uint8_t button_pin;
+
+	bool pinAPreviousVal;
+
+	bool buttonPreviousVal, buttonPressed;
+
+	long int lastUpdateTime;
 };
 
 #endif // __ENCODER_H__
