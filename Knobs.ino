@@ -70,14 +70,12 @@ void loop ()
 				#ifdef SERIAL_OUTPUT_EN
 					Serial.println("TAB");
 				#endif
-				delay(10);
 			} else {
 				Keyboard.press(KEY_LEFT_SHIFT);
 				Keyboard.write(KEY_TAB);
 				#ifdef SERIAL_OUTPUT_EN
 					Serial.println("SHIFT+TAB");
 				#endif
-				delay(10);
 				Keyboard.release(KEY_LEFT_SHIFT);
 			}
 		} else { // time window expired; a new sequence has to start
@@ -93,33 +91,43 @@ void loop ()
 				#ifdef SERIAL_OUTPUT_EN
 					Serial.println("TAB");
 				#endif
-				delay(10);
 			} else {
 				Keyboard.press(KEY_LEFT_SHIFT);
 				Keyboard.write(KEY_TAB);
 				#ifdef SERIAL_OUTPUT_EN
 					Serial.println("SHIFT+TAB");
 				#endif
-				delay(10);
 				Keyboard.release(KEY_LEFT_SHIFT);
 			}
 		}
 
 		#ifdef SERIAL_OUTPUT_EN
-		Serial.print("Enc0 Pos: ");
-		Serial.println( encoder0.getPosition() );
+			Serial.print("Enc0 Pos: ");
+			Serial.println( encoder0.getPosition() );
 		#endif
 	}
 	if (encoder1.getDistanceMoved() != 0) {
+		// Switch workspaces
 		#ifdef SERIAL_OUTPUT_EN
-		Serial.print("Enc1 Pos: ");
-		Serial.println( encoder1.getPosition() );
+			Serial.print("Enc1 Pos: ");
+			Serial.println( encoder1.getPosition() );
 		#endif
+
+		Keyboard.press(KEY_LEFT_CTRL);
+		Keyboard.press(KEY_LEFT_ALT);
+
+		if (encoder1.getDistanceMoved() > 0)
+			Keyboard.write(KEY_RIGHT_ARROW);
+		else
+			Keyboard.write(KEY_LEFT_ARROW);
+
+		Keyboard.release(KEY_LEFT_ALT);
+		Keyboard.release(KEY_LEFT_CTRL);
 	}
 	if (encoder2.getDistanceMoved() != 0) {
 		#ifdef SERIAL_OUTPUT_EN
-		Serial.print("Enc2 Pos: ");
-		Serial.println( encoder2.getPosition() );
+			Serial.print("Enc2 Pos: ");
+			Serial.println( encoder2.getPosition() );
 		#endif
 	}
 

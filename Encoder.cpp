@@ -2,11 +2,7 @@
 
 // constructor : sets pins as inputs
 
-Encoder::Encoder( uint8_t PinA, uint8_t PinB, uint8_t ButtonPin ) {// : pin_a ( PinA ), pin_b( PinB ) {
-	pin_a = PinA;
-	pin_b = PinB;
-	button_pin =  ButtonPin;
-
+Encoder::Encoder( uint8_t PinA, uint8_t PinB, uint8_t ButtonPin ) : pin_a( PinA ), pin_b( PinB ), button_pin( ButtonPin ) {
     pinMode(pin_a, INPUT);
     pinMode(pin_b, INPUT);
 	pinMode(button_pin, INPUT);
